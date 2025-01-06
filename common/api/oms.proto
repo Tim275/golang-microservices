@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option go_package = "github.com/Tim275/golang-microservices/commons/api";
+
+package api;
+
+// Definition einer Order Nachricht
+message Order {
+    string ID = 1;
+    string CustomerID = 2;
+    string Status = 3;
+    repeated OrderItem Items = 4;
+}
+
+// Definition eines Order Items
+message OrderItem {
+    string ID = 1;
+    int32 Quantity = 2;
+    string PriceID = 3;
+}
+
+// Definition eines Items mit Menge
+message ItemsWithQuantity {
+    string ItemID = 1;
+    int32 Quantity = 2;
+}
+
+// Anfragedaten zum Erstellen einer Bestellung
+message CreateOrderRequest {
+    string CustomerID = 1;
+    repeated ItemsWithQuantity Items = 2;   
+}
+
+// Antwortnachricht nach dem Erstellen einer Bestellung
+message CreateOrderResponse {
+    string Status = 1;
+    string Message = 2;
+    Order CreatedOrder = 3;
+}
+
+// Definition des gRPC Dienstes
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+}
