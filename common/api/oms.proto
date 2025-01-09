@@ -40,5 +40,15 @@ message CreateOrderResponse {
 
 // Definition des gRPC Dienstes
 service OrderService {
-    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+    rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+    rpc GetOrder (GetOrderRequest) returns (GetOrderResponse); // Optional
+}
+
+// Optional: Definitionen für GetOrder
+message GetOrderRequest {
+    string OrderID = 1;
+}
+
+message GetOrderResponse {
+    Order Order = 1;
 }
