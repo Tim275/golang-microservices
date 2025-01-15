@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net/http"
 
@@ -33,6 +32,9 @@ func (h *handler) registerRoutes(router *mux.Router) {
 }
 
 // HandleCreateOrder verarbeitet die Erstellung einer Bestellung
+// ...existing code...
+
+// HandleCreateOrder verarbeitet die Erstellung einer Bestellung
 func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	customerID := vars["customerID"]
@@ -43,12 +45,10 @@ func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req := &pb.CreateOrderRequest{
+	resp, err := h.orderClient.CreateOrder(r.Context(), &pb.CreateOrderRequest{
 		CustomerID: customerID,
 		Items:      items,
-	}
-
-	resp, err := h.orderClient.CreateOrder(context.Background(), req)
+	})
 	if err != nil {
 		log.Printf("Failed to create order: %v", err)
 		common.WriteError(w, http.StatusInternalServerError, err)
@@ -63,11 +63,9 @@ func (h *handler) HandleGetOrder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	orderID := vars["orderID"]
 
-	req := &pb.GetOrderRequest{
+	resp, err := h.orderClient.GetOrder(r.Context(), &pb.GetOrderRequest{
 		OrderID: orderID,
-	}
-
-	resp, err := h.orderClient.GetOrder(context.Background(), req)
+	})
 	if err != nil {
 		log.Printf("Failed to get order: %v", err)
 		common.WriteError(w, http.StatusInternalServerError, err)
@@ -76,3 +74,5 @@ func (h *handler) HandleGetOrder(w http.ResponseWriter, r *http.Request) {
 
 	common.WriteJSON(w, http.StatusOK, resp)
 }
+
+// ...existing code...
